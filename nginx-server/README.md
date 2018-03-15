@@ -87,4 +87,189 @@ commands will detect it and remind you to do so if necessary.
 
 ```
 
-- Lets run the following terraform plan command to see what Terraform will attempt to do to build the infrastructure you described (i.e. see the execution plan). You will have to specify the values of all of the variables listed below:
+- You will get `ssh_fingerprint` required for next commands.
+If your private key is located at ~/.ssh/id_rsa, use the following command to get the MD5 fingerprint of your public key:
+
+```
+$ ssh-keygen -E md5 -lf ~/.ssh/id_rsa.pub | awk '{print $2}'
+
+md5:2c:4d:c6:6c:20:67:1c:59:b2:67:61::a0:43:29:82:7d
+```
+
+- Lets run the `terraform plan` command which will show what Terraform will attempt to do to build the infrastructure that we have described . We have to specify the values of all of the variables listed below:
+
+```
+$ terraform plan \
+  -var "do_token=163dbe716842c7736fefafff443434fadf93ec976d0de......................." \
+  -var "pub_key=$HOME/.ssh/id_rsa.pub" \
+  -var "pvt_key=$HOME/.ssh/id_rsa" \
+  -var "ssh_fingerprint=2c:4d:c6:6c:20:67:1c:59:b2:67:61::a0:43:29:82:7d"
+  
+  
+  
+  
+  
+Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+
+
+------------------------------------------------------------------------
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  + digitalocean_droplet.nginx-server
+      id:                   <computed>
+      disk:                 <computed>
+      image:                "ubuntu-16-04-x64"
+      ipv4_address:         <computed>
+      ipv4_address_private: <computed>
+      ipv6:                 "true"
+      ipv6_address:         <computed>
+      ipv6_address_private: <computed>
+      locked:               <computed>
+      name:                 "nginx-server"
+      price_hourly:         <computed>
+      price_monthly:        <computed>
+      private_networking:   "false"
+      region:               "ams3"
+      resize_disk:          "true"
+      size:                 "512mb"
+      ssh_keys.#:           "1"
+      ssh_keys.0:           "2c:4d:c6:6c:20:67:1c:59:b2:67:61::a0:43:29:82:7d"
+      status:               <computed>
+      vcpus:                <computed>
+
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+------------------------------------------------------------------------
+
+```
+
+- Run the following `terraform apply` command to execute the current plan. Again, specify all the values for the variables below.
+```
+$ terraform apply \
+  -var "do_token=163dbe716842c7736fefafff443434fadf93ec976d0de......................." \
+  -var "pub_key=$HOME/.ssh/id_rsa.pub" \
+  -var "pvt_key=$HOME/.ssh/id_rsa" \
+  -var "ssh_fingerprint=2c:4d:c6:6c:20:67:1c:59:b2:67:61::a0:43:29:82:7d"
+  
+  
+  
+  An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  + digitalocean_droplet.nginx-server
+      id:                   <computed>
+      disk:                 <computed>
+      image:                "ubuntu-16-04-x64"
+      ipv4_address:         <computed>
+      ipv4_address_private: <computed>
+      ipv6:                 "true"
+      ipv6_address:         <computed>
+      ipv6_address_private: <computed>
+      locked:               <computed>
+      name:                 "nginx-server"
+      price_hourly:         <computed>
+      price_monthly:        <computed>
+      private_networking:   "false"
+      region:               "ams3"
+      resize_disk:          "true"
+      size:                 "512mb"
+      ssh_keys.#:           "1"
+      ssh_keys.0:           "2c:4d:c6:6c:20:67:1c:59:b2:67:61::a0:43:29:82:7d"
+      status:               <computed>
+      vcpus:                <computed>
+
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+digitalocean_droplet.nginx-server: Creating...
+  disk:                 "" => "<computed>"
+  image:                "" => "ubuntu-16-04-x64"
+  ipv4_address:         "" => "<computed>"
+  ipv4_address_private: "" => "<computed>"
+  ipv6:                 "" => "true"
+  ipv6_address:         "" => "<computed>"
+  ipv6_address_private: "" => "<computed>"
+  locked:               "" => "<computed>"
+  name:                 "" => "nginx-server"
+  price_hourly:         "" => "<computed>"
+  price_monthly:        "" => "<computed>"
+  private_networking:   "" => "false"
+  region:               "" => "ams3"
+  resize_disk:          "" => "true"
+  size:                 "" => "512mb"
+  ssh_keys.#:           "" => "1"
+  ssh_keys.0:           "" => "2c:4d:c6:6c:20:67:1c:59:b2:67:61::a0:43:29:82:7d"
+  status:               "" => "<computed>"
+  vcpus:                "" => "<computed>"
+digitalocean_droplet.nginx-server: Still creating... (10s elapsed)
+..
+..
+.
+.
+.
+digitalocean_droplet.nginx-server: Creation complete after 1m16s (ID: 85926534)
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+```
+
+### Destroy the Infrastructure and Application.
+
+To Destro the Infrastructure and Application we recenty create, Run the following `terraform destroy` command and specify all the values for the variables below.
+```
+$ $ terraform destroy \
+  -var "do_token=163dbe716842c7736fefafff443434fadf93ec976d0de......................." \
+  -var "pub_key=$HOME/.ssh/id_rsa.pub" \
+  -var "pvt_key=$HOME/.ssh/id_rsa" \
+  -var "ssh_fingerprint=2c:4d:c6:6c:20:67:1c:59:b2:67:61::a0:43:29:82:7d"
+  
+  
+  
+  
+  digitalocean_droplet.nginx-server: Refreshing state... (ID: 85926534)
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  - digitalocean_droplet.nginx-server
+
+
+Plan: 0 to add, 0 to change, 1 to destroy.
+
+Do you really want to destroy?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+digitalocean_droplet.nginx-server: Destroying... (ID: 85926534)
+digitalocean_droplet.nginx-server: Still destroying... (ID: 85926534, 10s elapsed)
+digitalocean_droplet.nginx-server: Destruction complete after 13s
+
+Destroy complete! Resources: 1 destroyed.
+
+```
+
+
+
+
