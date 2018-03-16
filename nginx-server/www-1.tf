@@ -1,4 +1,4 @@
-resource "digitalocean_droplet" "www-1" {
+resource "digitalocean_droplet" "nginx-server" {
     name = "nginx-server"
     image = "ubuntu-16-04-x64"
     size = "512mb"
